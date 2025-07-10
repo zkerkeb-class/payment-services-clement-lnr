@@ -1,3 +1,6 @@
+# Clément Lanneretonne
+payment services
+
 # Payment API - Stripe & AWS Lambda
 
 Une API de paiement complète utilisant Express.js, Stripe Checkout et AWS Lambda.
