@@ -1,0 +1,77 @@
+service: payment-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-1
+  stage: ${opt:stage, 'dev'}
+  
+  # Variables d'environnement
+  environment:
+    NODE_ENV: ${self:provider.stage}
+    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY}
+    STRIPE_WEBHOOK_SECRET: ${env:STRIPE_WEBHOOK_SECRET}
+    FRONTEND_URL: ${env:FRONTEND_URL}
+  
+  # Permissions IAM
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+      Resource: 
+        - 'arn:aws:logs:${self:provider.region}:*:log-group:/aws/lambda/*:*:*'
+
+functions:
+  api:
+    handler: src/lambda.handler
+    timeout: 30
+    memorySize: 256
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - stripe-signature
+            allowCredentials: false
+      - http:
+          path: /
+          method: ANY
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - stripe-signature
+            allowCredentials: false
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+    host: 0.0.0.0
+
+package:
+  exclude:
+    - .git/**
+    - .env
+    - README.md
+    - node_modules/.cache/**
+    - .serverless/**
+    - .nyc_output/**
+    - coverage/** 

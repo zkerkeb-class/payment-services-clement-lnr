@@ -1,0 +1,48 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+.next/
+out/
+coverage/
+
+# dotenv
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+*.csv
+*.sqlite
+debug.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# AWS credentials (if accidentally present)
+.aws/
+*.pem
+
+# Serverless
+.serverless/
+
+# Vercel
+.vercel/
+
+# Build artifacts (e.g., Babel or TypeScript)
+build/
+.cache/
+*.tsbuildinfo
+
+# Lambda deployment artifacts
+*.zip
+
+# VS Code / IDEs
+.vscode/
+.idea/
